@@ -12,23 +12,27 @@ GAME RULES:
 
 
 var scores, roundScore, activePlayer, gamePlaying;
+var lastDice;
 
 init();
 
 document.querySelector('.btn-roll').addEventListener('click', function() {
 
 	if (gamePlaying) {
-			var dice = Math.floor(Math.random() * 6) + 1;
+			
+		var dice = Math.floor(Math.random() * 6) + 1;
 
 		var diceDOM = document.querySelector('.dice');
 		diceDOM.style.display = 'block';
 		diceDOM.src = 'dice-' + dice + '.png';
 
-		if (dice !== 1) {
-		
-			if (roundScore === 0) {
-			document.querySelector('.dice').style.display = 'block'
-			}
+		if (dice === 6 && lastDice === 6) {
+
+			scores[activePlayer] = 0;
+			document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
+			nextPlayer()
+
+		} else if (dice !== 1) {
 
 			roundScore += dice;
 			document.querySelector('#current-' + activePlayer).textContent = roundScore;
@@ -36,6 +40,8 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 		} else {
 			nextPlayer()
 		}
+
+		lastDice = dice;
 	}
 
 });
@@ -50,7 +56,7 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
 
 		document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
 
-		if (scores[activePlayer] >= 20) {
+		if (scores[activePlayer] >= 100) {
 		
 			document.getElementById('name-' + activePlayer).textContent = "Winner!!";
 		
